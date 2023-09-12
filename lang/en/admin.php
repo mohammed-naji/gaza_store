@@ -13,6 +13,8 @@ return [
     'orders' => 'Orders',
     'payments' => 'Payments',
     'customers' => 'Customers',
-    'add_new' => 'Add New'
+    'add_new' => 'Add New',
+
+    'langs' => 'Languages'
 
 ];
