@@ -20,68 +20,101 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('back/css/sb-admin-2.min.css') }}" rel="stylesheet">
     @yield('css')
+    <style>
+        .colors {
+            width: 100px;
+            position: fixed;
+            right: -60px;
+            top: 100px;
+            display: flex;
+            transition: all .3s ease
+        }
+
+        .colors.open {
+            right: 0;
+        }
+        .colors button {
+            background: #d9d9d9;
+            border: 0;
+            width: 40px;
+            height: 40px;
+        }
+
+        .colors ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            background: #e4e4e4;
+            width: 60px;
+            justify-content: center;
+            padding: 5px 0;
+        }
+
+        .colors ul li {
+            width: 20px;
+            height: 20px;
+            margin: 3px;
+            cursor: pointer;
+        }
+    </style>
+
+    @if (App::getLocale() == 'ar')
+        <style>
+            body {
+                direction: rtl;
+                text-align: right;
+            }
+
+            .colors {
+                right: unset;
+                left: -60px;
+            }
+
+            .colors.open {
+                right: unset;
+                left: 0;
+            }
+
+            .sidebar {
+                padding: 0
+            }
+
+            .sidebar .nav-item .nav-link {
+                text-align: right;
+            }
+
+            .sidebar .nav-item .nav-link[data-toggle=collapse]::after {
+                float: left;
+                transform: rotate(180deg)
+            }
+
+            .ml-auto, .mx-auto {
+                margin-left: unset!important;
+                margin-right: auto!important;
+            }
+        </style>
+    @endif
 </head>
 
 <body id="page-top">
+    <div class="colors">
+        <button><i class="fas fa-cog"></i></button>
+        <ul>
+            <li class="bg-gradient-primary"></li>
+            <li class="bg-gradient-dark"></li>
+            <li class="bg-gradient-success"></li>
+            <li class="bg-gradient-info"></li>
+            <li class="bg-gradient-warning"></li>
+            <li class="bg-gradient-danger"></li>
+        </ul>
+    </div>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
+        @include('admin.sidebar')
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -99,6 +132,16 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <ul>
+                            @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                <li>
+                                    <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                        {{ $properties['native'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -276,6 +319,25 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('back/js/sb-admin-2.min.js') }}"></script>
     @yield('js')
+
+    <script>
+        document.querySelector('.colors button').onclick = () => {
+            document.querySelector('.colors').classList.toggle('open')
+        }
+
+        document.querySelectorAll('.colors ul li').forEach(el => {
+            el.onclick = () => {
+                let cl = el.classList[0];
+                document.querySelector('#sidebar_color').className = '';
+                document.querySelector('#sidebar_color').classList.add(cl)
+                localStorage.setItem('cl', cl)
+            }
+        });
+
+        let oldclass = localStorage.getItem('cl')??'bg-gradient-primary'
+        document.querySelector('#sidebar_color').classList.add(oldclass)
+
+    </script>
 </body>
 
 </html>
