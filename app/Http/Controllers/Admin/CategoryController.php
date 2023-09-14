@@ -33,13 +33,24 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name_en' => 'required',
+            'name_ar' => 'required',
             'image' => 'required'
         ]);
 
         $data = $request->except('_token', 'image');
 
-        $category = Category::create($data);
+        // dd($request->all());
+
+        $desc = [
+            'en' => $request->description_en,
+            'ar' => $request->description_ar,
+        ];
+
+        $category = Category::create([
+            'name' => '',
+            'description' => json_encode($desc, JSON_UNESCAPED_UNICODE)
+        ]);
 
         // Add image to relation
         $img_name = rand().time().$request->file('image')->getClientOriginalName();
@@ -78,12 +89,21 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'name' => 'required'
+            'name_en' => 'required',
+            'name_ar' => 'required'
         ]);
 
-        $data = $request->except('_token');
 
-        $category->update($data);
+
+        $desc = [
+            'en' => $request->description_en,
+            'ar' => $request->description_ar,
+        ];
+
+        $category->update([
+            'name' => '',
+            'description' => json_encode($desc, JSON_UNESCAPED_UNICODE)
+        ]);
 
         // Add image to relation
 

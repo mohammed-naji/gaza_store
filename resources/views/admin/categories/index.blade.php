@@ -25,7 +25,7 @@
         <td>
             <img width="100" src="{{ $category->img_path }}" alt="">
         </td>
-        <td>{{ $category->name }}</td>
+        <td>{{ $category->trans_name }}</td>
         <td></td>
         <td>
             <a class="btn btn-sm btn-primary" href="{{ route('admin.categories.edit', $category->id) }}"><i class="fas fa-edit"></i></a>
