@@ -186,7 +186,7 @@ return [
         'email'                 => 'البريد الالكتروني',
         'first_name'            => 'الاسم',
         'last_name'             => 'اسم العائلة',
-        'password'              => 'كلمة المرور',
+        'password'              => 'password',
         'password_confirmation' => 'تأكيد كلمة المرور',
         'city'                  => 'المدينة',
         'country'               => 'الدولة',

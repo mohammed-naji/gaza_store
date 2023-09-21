@@ -32,4 +32,14 @@ class Product extends Model
     function order_details() {
         return $this->HasMany(OrderDetail::class);
     }
+
+    function getImgPathAttribute() {
+        $url = 'https://via.placeholder.com/100x80';
+
+        if($this->image) {
+            $url = asset('images/'. $this->image->path);
+        }
+
+        return $url;
+    }
 }

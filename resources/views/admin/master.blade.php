@@ -21,6 +21,9 @@
     <link href="{{ asset('back/css/sb-admin-2.min.css') }}" rel="stylesheet">
     @yield('css')
     <style>
+        .img-profile {
+            object-fit: cover
+        }
         .colors {
             width: 100px;
             position: fixed;
@@ -62,6 +65,9 @@
 
     @if (App::getLocale() == 'ar')
         <style>
+            .topbar .dropdown .dropdown-menu {
+                right: -60%;
+            }
             body {
                 direction: rtl;
                 text-align: right;
@@ -220,14 +226,23 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+
+                                @php
+                                    if(Auth::user()->image) {
+                                        $src = asset('images/'.Auth::user()->image->path);
+                                    }else {
+                                        $src = 'https://ui-avatars.com/api/?background=random&name='.Auth::user()->name;
+                                    }
+                                @endphp
+
                                 <img class="img-profile rounded-circle"
-                                    src="{{ asset('back/img/undraw_profile.svg') }}" alt="news">
+                                    src="{{ $src }}" alt="news">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{{ route('admin.profile') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -240,10 +255,11 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> {{ __('admin.out') }}</button>
+                                </form>
+
                             </div>
                         </li>
 

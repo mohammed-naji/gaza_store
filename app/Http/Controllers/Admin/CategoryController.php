@@ -93,8 +93,6 @@ class CategoryController extends Controller
             'name_ar' => 'required'
         ]);
 
-
-
         $desc = [
             'en' => $request->description_en,
             'ar' => $request->description_ar,

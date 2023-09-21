@@ -36,4 +36,12 @@ trait Trans {
         ];
         $this->attributes['name'] = json_encode($name, JSON_UNESCAPED_UNICODE);
     }
+
+    function setDescriptionAttribute() {
+        $description = [
+            'en' => request()->description_en,
+            'ar' => request()->description_ar,
+        ];
+        $this->attributes['description'] = json_encode($description, JSON_UNESCAPED_UNICODE);
+    }
 }

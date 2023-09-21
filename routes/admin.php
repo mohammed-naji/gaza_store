@@ -3,13 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 // Route::group(['prefix' => LaravelLocalization::setLocale()], function() {
 Route::prefix(LaravelLocalization::setLocale())->middleware('auth', 'hamada', 'verified')->group(function() {
     Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+        Route::put('/profile', [AdminController::class, 'profile_data'])->name('profile_data');
+        Route::post('/check-password', [AdminController::class, 'check_password'])->name('check_password');
 
         Route::resource('categories', CategoryController::class);
+        Route::resource('products', ProductController::class);
     });
 });
