@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -100,8 +101,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
+        // dd($request->all());
         $request->validate([
             'name_en' => 'required',
             'name_ar' => 'required',
@@ -114,7 +116,7 @@ class ProductController extends Controller
 
         // $data = $request->except('_token', 'image', 'gallery');
 
-        $product = Product::create([
+        $product->update([
             'name' => '',
             'description' => '',
             'price' => $request->price,
@@ -123,25 +125,33 @@ class ProductController extends Controller
         ]);
 
         // Add image to relation
-        $img_name = rand().time().$request->file('image')->getClientOriginalName();
-        $request->file('image')->move(public_path('images'), $img_name);
-        $product->image()->create([
-            'path' => $img_name,
-        ]);
+        if($request->hasFile('image')) {
+            File::delete( public_path('images/'.$product->image->path) );
+            $product->image()->delete();
 
-        foreach($request->gallery as $img) {
-            $img_name = rand().time().$img->getClientOriginalName();
-            $img->move(public_path('images'), $img_name);
+            $img_name = rand().time().$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'), $img_name);
             $product->image()->create([
                 'path' => $img_name,
-                'type' => 'gallery'
             ]);
+        }
+
+
+        if($request->has('gallery')) {
+            foreach($request->gallery as $img) {
+                $img_name = rand().time().$img->getClientOriginalName();
+                $img->move(public_path('images'), $img_name);
+                $product->image()->create([
+                    'path' => $img_name,
+                    'type' => 'gallery'
+                ]);
+            }
         }
 
         return redirect()
         ->route('admin.products.index')
-        ->with('msg', 'Product added successfully')
-        ->with('type', 'success');
+        ->with('msg', 'Product updated successfully')
+        ->with('type', 'info');
     }
 
     /**
@@ -162,5 +172,11 @@ class ProductController extends Controller
         ->route('admin.products.index')
         ->with('msg', 'Product deleted successfully')
         ->with('type', 'info');
+    }
+
+    function delete_img($id) {
+        $img = Image::find($id);
+        File::delete( public_path('images/'.$img->path) );
+        return Image::destroy($id);
     }
 }

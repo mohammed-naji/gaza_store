@@ -4,6 +4,44 @@
         height: 100px;
         object-fit: cover
     }
+
+    .gallery-wrapper {
+    display: flex;
+    gap: 5px
+}
+
+.gallery-wrapper div {
+    position: relative;
+}
+
+.gallery-wrapper div span {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #ff8282;
+    color: #fff;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    border-radius: 50%;
+    opacity: 0;
+    cursor: pointer;
+    visibility: hidden;
+    transition: all .3s ease;
+}
+
+.gallery-wrapper div:hover span {
+    opacity: 1;
+    visibility: visible;
+}
+
+.gallery-wrapper div span:hover {
+    background: #f00;
+}
+
 </style>
 <div class="row">
     <div class="col-md-6">
@@ -50,9 +88,14 @@
                 <small class="invalid-feedback">{{ $message }}</small>
             @enderror
             @if ($product->gallery)
+            <div class="gallery-wrapper">
                 @foreach ($product->gallery as $item)
-                    <img width="80" class="perv-img" src="{{ asset('images/'.$item->path) }}" alt="">
+                    <div>
+                        <img width="80" class="perv-img" src="{{ asset('images/'.$item->path) }}" alt="">
+                        <span onclick="delImg(event, {{ $item->id }})">x</span>
+                    </div>
                 @endforeach
+            </div>
             @endif
         </div>
     </div>

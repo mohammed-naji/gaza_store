@@ -16,5 +16,6 @@ Route::prefix(LaravelLocalization::setLocale())->middleware('auth', 'hamada', 'v
 
         Route::resource('categories', CategoryController::class);
         Route::resource('products', ProductController::class);
+        Route::get('/delete-image/{id?}', [ProductController::class, 'delete_img'])->name('delete_img');
     });
 });
