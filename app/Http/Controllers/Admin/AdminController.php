@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Notifications\Console\NotificationTableCommand;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class AdminController extends Controller
 {
@@ -60,5 +62,19 @@ class AdminController extends Controller
 
     function check_password(Request $request) {
         return Hash::check($request->password, Auth::user()->password);
+    }
+
+    function orders() {
+        if(request()->has('id')) {
+            $id = request()->id;
+            Auth::user()->notifications->find($id)->markAsRead();
+        }
+
+        return 'Order page';
+    }
+
+    function notifications() {
+        Auth::user()->notifications->markAsRead();
+        return view('admin.notifications');
     }
 }
