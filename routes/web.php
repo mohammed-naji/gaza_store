@@ -22,7 +22,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 //     return view('welcome');
 // });
 
-Route::prefix(LaravelLocalization::setLocale())->middleware('auth', 'hamada', 'verified')->group(function() {
+Route::prefix(LaravelLocalization::setLocale())->group(function() {
 
     Route::get('/', [FrontController::class, 'index'])->name('front.index');
     Route::get('/about-us', [FrontController::class, 'about'])->name('front.about');

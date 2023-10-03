@@ -16,9 +16,9 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
     <!-- Custom styles for this template-->
     <link href="{{ asset('back/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     @yield('css')
     <style>
         .img-profile {
@@ -178,8 +178,8 @@
                                     @php
                                         $count = Auth::user()->unreadnotifications->count();
                                     @endphp
-                                    @if ($count != 0)
-                                    <span class="badge badge-danger badge-counter">
+
+                                    <span class="{{ $count == 0 ? 'd-none' : '' }} badge badge-danger badge-counter" data-count="{{ $count }}">
                                         @php
                                             if($count > 5) {
                                                 echo '5+';
@@ -188,7 +188,6 @@
                                             }
                                         @endphp
                                     </span>
-                                    @endif
                                 </a>
                                 <!-- Dropdown - Alerts -->
                                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -321,7 +320,7 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('back/js/sb-admin-2.min.js') }}"></script>
     @yield('js')
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         document.querySelector('.colors button').onclick = () => {
             document.querySelector('.colors').classList.toggle('open')
@@ -340,6 +339,10 @@
         document.querySelector('#sidebar_color').classList.add(oldclass)
 
     </script>
+    <script>
+        let userId = '{{ Auth::id() }}'
+    </script>
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>
