@@ -126,7 +126,10 @@ class ProductController extends Controller
 
         // Add image to relation
         if($request->hasFile('image')) {
-            File::delete( public_path('images/'.$product->image->path) );
+            if($product->image) {
+                File::delete( public_path('images/'.$product->image->path) );
+            }
+
             $product->image()->delete();
 
             $img_name = rand().time().$request->file('image')->getClientOriginalName();

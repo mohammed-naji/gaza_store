@@ -168,44 +168,47 @@
                             </div>
                         </li>
 
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                @php
-                                    $count = Auth::user()->unreadnotifications->count();
-                                @endphp
-                                @if ($count != 0)
-                                <span class="badge badge-danger badge-counter">
+                        @if (Auth::user())
+                            <!-- Nav Item - Alerts -->
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell fa-fw"></i>
+                                    <!-- Counter - Alerts -->
                                     @php
-                                        if($count > 5) {
-                                            echo '5+';
-                                        }else {
-                                            echo $count;
-                                        }
+                                        $count = Auth::user()->unreadnotifications->count();
                                     @endphp
-                                </span>
-                                @endif
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Notification Center
-                                </h6>
-                                @foreach (Auth::user()->notifications()->take(5)->get() as $item)
-                                <a class="dropdown-item d-flex align-items-center {{ $item->read_at ? '' : 'bg-light'}}" href="{{ $item->data['url'] }}?id={{ $item->id }}">
-                                    <div>
-                                        <div class="small text-gray-500">{{ $item->created_at->format('F d, Y') }}</div>
-                                        <span class="font-weight-bold">{{ $item->data['msg'] }}</span>
-                                    </div>
+                                    @if ($count != 0)
+                                    <span class="badge badge-danger badge-counter">
+                                        @php
+                                            if($count > 5) {
+                                                echo '5+';
+                                            }else {
+                                                echo $count;
+                                            }
+                                        @endphp
+                                    </span>
+                                    @endif
                                 </a>
-                                @endforeach
-                                <a class="dropdown-item text-center small text-gray-500" href="{{ route('admin.notifications') }}">Show All Alerts</a>
-                            </div>
-                        </li>
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                    aria-labelledby="alertsDropdown">
+                                    <h6 class="dropdown-header">
+                                        Notification Center
+                                    </h6>
+                                    @foreach (Auth::user()->notifications()->take(5)->get() as $item)
+                                    <a class="dropdown-item d-flex align-items-center {{ $item->read_at ? '' : 'bg-light'}}" href="{{ $item->data['url'] }}?id={{ $item->id }}">
+                                        <div>
+                                            <div class="small text-gray-500">{{ $item->created_at->format('F d, Y') }}</div>
+                                            <span class="font-weight-bold">{{ $item->data['msg'] }}</span>
+                                        </div>
+                                    </a>
+                                    @endforeach
+                                    <a class="dropdown-item text-center small text-gray-500" href="{{ route('admin.notifications') }}">Show All Alerts</a>
+                                </div>
+                            </li>
+                        @endif
+
 
 
                         <div class="topbar-divider d-none d-sm-block"></div>

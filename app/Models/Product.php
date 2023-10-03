@@ -18,7 +18,9 @@ class Product extends Model
     }
 
     function image() {
-        return $this->morphOne(Image::class, 'imageable')->where('type', 'main');
+        return $this->morphOne(Image::class, 'imageable')->withDefault([
+            'path' => 'no-image.png'
+        ])->where('type', 'main');
     }
 
     function gallery() {

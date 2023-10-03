@@ -26,7 +26,7 @@
             <img width="100" src="{{ $category->img_path }}" alt="">
         </td>
         <td>{{ $category->trans_name }}</td>
-        <td></td>
+        <td>{{ $category->products_count }}</td>
         <td>
             <a class="btn btn-sm btn-primary" href="{{ route('admin.categories.edit', $category->id) }}"><i class="fas fa-edit"></i></a>
             <form class="d-inline" action="{{ route('admin.categories.destroy', $category->id) }}" method="POST">
